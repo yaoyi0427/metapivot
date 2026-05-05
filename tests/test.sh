@@ -62,6 +62,7 @@ TEST_FILES=(
     "$WORKSPACE/tests/test_score.sh"
     "$WORKSPACE/tests/test_collector.sh"
     "$WORKSPACE/tests/test_git_status.sh"
+    "$WORKSPACE/tests/test_alerter.sh"
 )
 
 for test_file in "${TEST_FILES[@]}"; do

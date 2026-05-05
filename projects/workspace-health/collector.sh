@@ -153,6 +153,12 @@ JSON
     ls -t "$DATA_DIR/history/"*.json 2>/dev/null | tail -n +101 | xargs rm -f 2>/dev/null || true
     
     echo "[$(date '+%H:%M:%S')] 采集完成 | 健康分: $SCORE | Git: $GIT_BRANCH | 磁盘: ${DISK_PCT:-0}% | 内存: ${MEM_PCT:-0}%"
+    
+    # 调用告警检查
+    ALERTER="$WORKSPACE/projects/workspace-health/alerter.sh"
+    if [ -f "$ALERTER" ]; then
+        bash "$ALERTER" check "$DATA_DIR/latest.json" 2>/dev/null || true
+    fi
 }
 
 # Initial run
