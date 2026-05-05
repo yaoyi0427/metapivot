@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.metapivot.workspace-health</string>
+    
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/yaoyi/.openclaw/workspace-metapivot/projects/workspace-health/collector.sh</string>
+        <string>60</string>
+    </array>
+    
+    <key>RunAtLoad</key>
+    <true/>
+    
+    <key>KeepAlive</key>
+    <true/>
+    
+    <key>StandardOutPath</key>
+    <string>/Users/yaoyi/.openclaw/workspace-metapivot/projects/workspace-health/data/logs/collector.log</string>
+    
+    <key>StandardErrorPath</key>
+    <string>/Users/yaoyi/.openclaw/workspace-metapivot/projects/workspace-health/data/logs/collector.error.log</string>
+    
+    <key>ProcessType</key>
+    <string>Background</string>
+    
+    <key>WorkingDirectory</key>
+    <string>/Users/yaoyi/.openclaw/workspace-metapivot</string>
+    
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>WORKSPACE</key>
+        <string>/Users/yaoyi/.openclaw/workspace-metapivot</string>
+    </dict>
+</dict>
+</plist>

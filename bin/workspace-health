@@ -1,0 +1,115 @@
+#!/bin/bash
+# Workspace Health 命令行工具
+# 用法:
+#   workspace-health status    # 查看当前状态
+#   workspace-health start    # 启动服务
+#   workspace-health stop     # 停止服务
+#   workspace-health restart # 重启服务
+#   workspace-health logs    # 查看日志
+#   workspace-health test    # 发送测试告警
+#   workspace-health help    # 显示帮助
+
+WORKSPACE="$HOME/.openclaw/workspace-metapivot"
+PLIST_NAME="com.metapivot.workspace-health.plist"
+PLIST_PATH="$HOME/Library/LaunchAgents/$PLIST_NAME"
+LOG_DIR="$WORKSPACE/projects/workspace-health/data/logs"
+
+cmd="${1:-status}"
+
+case "$cmd" in
+    status)
+        echo "=== Workspace Health 服务状态 ==="
+        if launchctl list | grep -q "com.metapivot.workspace-health"; then
+            echo "✅ 服务: 运行中"
+        else
+            echo "⚠️  服务: 未运行"
+        fi
+        echo ""
+        echo "=== 最新数据 ==="
+        if [ -f "$WORKSPACE/projects/workspace-health/data/latest.json" ]; then
+            python3 -c "
+import json
+d = json.load(open('$WORKSPACE/projects/workspace-health/data/latest.json'))
+print(f\"健康分: {d['score']}/100\")
+print(f\"Git: {d['git']['branch']} (clean: {d['git']['clean']})\")
+print(f\"磁盘: {d['system']['disk_pct']}%\")
+print(f\"内存: {d['system']['memory_pct']}%\")
+print(f\"HEARTBEAT: {'有效' if d['heartbeat']['effective'] else '无效'}\")
+print(f\"时间: {d['timestamp']}\")
+"
+        else
+            echo "无数据文件"
+        fi
+        ;;
+    start)
+        echo "启动 Workspace Health 服务..."
+        if [ -f "$PLIST_PATH" ]; then
+            launchctl load "$PLIST_PATH"
+            echo "✅ 服务已启动"
+        else
+            echo "❌ 服务未安装，请先运行 install.sh"
+            exit 1
+        fi
+        ;;
+    stop)
+        echo "停止 Workspace Health 服务..."
+        launchctl unload "$PLIST_PATH" 2>/dev/null || true
+        echo "✅ 服务已停止"
+        ;;
+    restart)
+        $0 stop
+        sleep 1
+        $0 start
+        ;;
+    logs)
+        echo "=== 最近的日志 ==="
+        if [ -f "$LOG_DIR/collector.log" ]; then
+            tail -30 "$LOG_DIR/collector.log"
+        else
+            echo "日志文件不存在"
+        fi
+        ;;
+    error-logs)
+        echo "=== 最近的错误日志 ==="
+        if [ -f "$LOG_DIR/collector.error.log" ]; then
+            tail -30 "$LOG_DIR/collector.error.log"
+        else
+            echo "无错误日志"
+        fi
+        ;;
+    test)
+        echo "发送测试告警..."
+        bash "$WORKSPACE/projects/workspace-health/alerter.sh" test
+        ;;
+    check)
+        echo "检查告警..."
+        bash "$WORKSPACE/projects/workspace-health/alerter.sh" check
+        ;;
+    install)
+        echo "请运行: bash $WORKSPACE/scripts/install.sh"
+        ;;
+    uninstall)
+        echo "请运行: bash $WORKSPACE/scripts/uninstall.sh"
+        ;;
+    help|--help|-h)
+        echo "Workspace Health 命令行工具"
+        echo ""
+        echo "用法: workspace-health <命令>"
+        echo ""
+        echo "命令:"
+        echo "  status      查看当前状态"
+        echo "  start       启动服务"
+        echo "  stop        停止服务"
+        echo "  restart     重启服务"
+        echo "  logs        查看日志"
+        echo "  error-logs  查看错误日志"
+        echo "  test        发送测试告警"
+        echo "  check       检查告警条件"
+        echo "  help        显示帮助"
+        ;;
+    *)
+        echo "未知命令: $cmd"
+        echo "运行 'workspace-health help' 查看帮助"
+        exit 1
+        ;;
+esac
