@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace 健康仪表盘</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f1419; color: #e6e6e6; min-height: 100vh; padding: 24px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { color: #00d4ff; font-size: 28px; margin-bottom: 8px; }
+        .subtitle { color: #7f8c8d; margin-bottom: 32px; }
+        .timestamp { color: #7f8c8d; font-size: 12px; margin-top: 4px; }
+        .grid { display: grid; grid: auto / repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
+        .card { background: #1a2332; border-radius: 12px; padding: 20px; border: 1px solid #2d3a4d; }
+        .card h2 { color: #00d4ff; font-size: 16px; margin-bottom: 16px; border-bottom: 1px solid #2d3a4d; padding-bottom: 10px; }
+        .card ul { list-style: none; }
+        .card li { padding: 6px 0; font-size: 14px; line-height: 1.5; }
+        .ok { color: #2ecc71; }
+        .fail { color: #e74c3c; }
+        .warn { color: #f39c12; }
+        .info { color: #3498db; }
+        .stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2d3a4d; }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-label { color: #7f8c8d; }
+        .stat-value { color: #e6e6e6; font-weight: 500; }
+        .branch { display: inline-block; background: #2d3a4d; color: #00d4ff; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: bold; margin-bottom: 12px; }
+        .sync-status { font-size: 12px; margin-left: 10px; }
+        .ahead { color: #f39c12; }
+        .behind { color: #e74c3c; }
+        .clean { color: #2ecc71; }
+        .dirty { color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛠️ Workspace 健康仪表盘</h1>
+        <p class="subtitle">~/.openclaw/workspace-metapivot</p>
+        <p class="timestamp">报告生成时间：2026-05-05 22:35:55</p>
+
+        <div class="grid">
+            <!-- Git 状态 -->
+            <div class="card">
+                <h2>📊 Git 状态</h2>
+                <span class="branch">🌿 main</span>
+                <span class="sync-status ahead">↑ ahead 0</span>
+                <span class="sync-status behind">↓ behind 0</span>
+                <ul>
+                    <li class="dirty">⚠️ 未提交的更改：</li><li class="dirty" style="margin-left:16px;font-size:12px;">?? .DS_Store</li><li class="dirty" style="margin-left:16px;font-size:12px;">?? .openclaw/</li><li class="dirty" style="margin-left:16px;font-size:12px;">?? AGENTS.md</li><li class="dirty" style="margin-left:16px;font-size:12px;">?? HEARTBEAT.md</li><li class="dirty" style="margin-left:16px;font-size:12px;">?? IDENTITY.md</li><li class="dirty" style="margin-left:16px;font-size:12px;">?? MEMORY.md</li><li class="dirty" style="margin-left:16px;font-size:12px;">?? SOUL.md</li><li class="dirty" style="margin-left:16px;font-size:12px;">?? TOOLS.md</li><li class="dirty" style="margin-left:16px;font-size:12px;">?? USER.md</li><li class="dirty" style="margin-left:16px;font-size:12px;">?? projects/</li><li class="dirty" style="margin-left:16px;font-size:12px;">?? skills/</li>
+                    <li style="margin-top:12px;font-weight:bold;color:#7f8c8d;">最近一次 commit：</li>
+                    <li class="fail">无法获取 commit 信息</li>
+                </ul>
+            </div>
+
+            <!-- 配置文件 -->
+            <div class="card">
+                <h2>📁 配置文件完整性</h2>
+                <ul>
+                    <li class="ok">✅ IDENTITY.md</li><li class="ok">✅ USER.md</li><li class="ok">✅ SOUL.md</li><li class="ok">✅ AGENTS.md</li><li class="ok">✅ MEMORY.md</li><li class="ok">✅ TOOLS.md</li><li class="ok">✅ HEARTBEAT.md</li>
+                </ul>
+            </div>
+
+            <!-- Memory 状态 -->
+            <div class="card">
+                <h2>🧠 Memory 更新频率</h2>
+                <ul>
+                    <li class="info">共 0 个文件</li>
+                </ul>
+            </div>
+
+            <!-- 系统资源 -->
+            <div class="card">
+                <h2>💻 系统资源</h2>
+                <ul>
+                    <li class="stat-row"><span class="stat-label">CPU 负载</span><span class="stat-value info">1.22 1.35 1.40</span></li>
+                    <li class="stat-row"><span class="stat-label">内存使用</span><span class="stat-value info">15G</span></li>
+                    <li class="stat-row"><span class="stat-label">磁盘使用</span><span class="stat-value info">66Gi / 228Gi (33% used)</span></li>
+                    <li class="stat-row"><span class="stat-label">运行时长</span><span class="stat-value info">38 days</span></li>
+                </ul>
+            </div>
+
+            <!-- HEARTBEAT 状态 -->
+            <div class="card">
+                <h2>💓 HEARTBEAT 状态</h2>
+                <p><span class="ok">✅ 已配置</span></p>
+                <p class="info" style="margin-top:12px;font-size:12px;">文件大小：    1248 bytes | 行数：      58</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
